@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carissma - Artesanía y Curación para Ti</title>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- Tailwind CSS para estilizado profesional y rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuentes de Google: Playfair Display para títulos elegantes y Montserrat para cuerpo de texto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Estilos personalizados para animaciones suaves */
+        .cart-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        /* Ocultar scrollbar en navegadores */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- CABECERA (HEADER) -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Botón de Menú Hamburguesa Izquierdo (Sólo en móvil) -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-full hover:bg-gray-100 transition focus:outline-none cursor-pointer text-gray-600" aria-label="Abrir Menú">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            <!-- Icono Izquierdo (Oculto en móvil, visible en escritorio) -->
+            <button onclick="filterCategory('todos'); smoothScrollTo(0, 1200);" class="hidden md:flex items-center gap-3 cursor-pointer focus:outline-none group text-left" aria-label="Volver al inicio">
+                <img src="carissma - 4.jpg" alt="Icono Carissma" class="w-12 h-12 rounded-full object-cover shadow-sm border border-orange-100 transition group-hover:scale-105" onerror="this.src='https://placehold.co/48x48/f97316/ffffff?text=C'">
+                <span class="hidden sm:inline font-semibold text-gray-700 tracking-wider text-xs group-hover:text-orange-600 transition">CARISSMA</span>
+            </button>
+
+            <!-- Logo de Texto Centrado -->
+            <button onclick="filterCategory('todos'); smoothScrollTo(0, 1200);" class="flex justify-center flex-1 max-w-xs md:max-w-sm px-4 cursor-pointer focus:outline-none group" aria-label="Volver al inicio">
+                <img src="images/logocarissma_horizontal.png" alt="Carissma Logo" class="h-12 md:h-16 object-contain transition group-hover:scale-102" onerror="this.src='https://placehold.co/200x60/f97316/ffffff?text=Carissma'">
+            </button>
+
+            <!-- Botón de Carrito Derecho -->
+            <div class="flex items-center">
+                <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-gray-100 transition focus:outline-none cursor-pointer" aria-label="Ver Carrito">
+                    <div class="w-10 h-10 flex items-center justify-center bg-orange-50 rounded-full text-orange-600 hover:text-orange-700">
+                        <!-- Icono de Carrito SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </div>
+                    <!-- Contador de artículos flotante -->
+                    <span id="cart-counter" class="absolute top-0 right-0 bg-orange-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white shadow-sm transform translate-x-1 -translate-y-1">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MENÚ DE NAVEGACIÓN (Sólo visible en Escritorio) -->
+        <nav class="hidden md:block bg-white border-t border-gray-50 py-3">
+            <ul class="flex justify-center items-center px-4 space-x-12 text-sm font-medium text-gray-600 w-full">
+                <li>
+                    <button onclick="filterCategory('todos'); smoothScrollTo(0, 1200);" id="btn-nav-todos" class="hover:text-orange-600 transition border-b-2 border-orange-500 pb-1 text-orange-600 cursor-pointer">Inicio</button>
+                </li>
+                <li>
+                    <button onclick="filterCategory('Hecho a mano'); smoothScrollTo(0, 1200);" id="btn-nav-handmade" class="hover:text-orange-600 transition border-b-2 border-transparent pb-1 cursor-pointer">Hecho a mano</button>
+                </li>
+                <li>
+                    <button onclick="filterCategory('Curado'); smoothScrollTo(0, 1200);" id="btn-nav-curated" class="hover:text-orange-600 transition border-b-2 border-transparent pb-1 cursor-pointer">Curado</button>
+                </li>
+                <li>
+                    <button onclick="smoothScrollToSection('#nosotros-section')" class="hover:text-orange-600 transition cursor-pointer">Sobre Nosotros</button>
+                </li>
+                <li>
+                    <button onclick="smoothScrollToSection('#contacto-section')" class="hover:text-orange-600 transition cursor-pointer">Contacto</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- BANNER HERO -->
+    <div class="relative bg-orange-500 h-40 md:h-52 flex items-center justify-center overflow-hidden shadow-inner">
+        <!-- Imagen de textura de fondo (papel arrugado naranja) -->
+        <img src="images/textura_carissma.jpg" alt="Textura de papel arrugado naranja" class="absolute inset-0 w-full h-full object-cover opacity-85 mix-blend-multiply" onerror="this.src='https://placehold.co/1200x300/ea580c/ffffff?text=Textura+Naranja'">
+        <!-- Overlay suave para mejorar contraste -->
+        <div class="absolute inset-0 bg-black/10"></div>
+        <!-- Texto destacado -->
+        <div class="relative z-10 text-center px-4">
+            <h2 class="serif-font text-2xl sm:text-3xl md:text-5xl text-white font-medium tracking-wide drop-shadow-md">
+                Artesanía y Curación para Ti
+            </h2>
+            <p class="text-white/90 text-[10px] sm:text-xs md:text-sm mt-2 tracking-widest uppercase font-light">Objetos con alma para espacios excepcionales</p>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-10 w-full">
+        <!-- Controles de filtrado rápidos e informativos -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-gray-100 pb-4">
+            <div>
+                <h3 id="category-title" class="serif-font text-2xl md:text-3xl text-gray-900 font-semibold">Nuestra Colección</h3>
+                <p id="category-desc" class="text-gray-500 text-sm mt-1">Explora piezas artesanales hechas a mano y artículos de diseño curados.</p>
+            </div>
+            
+            <!-- Botones de filtrado visual -->
+            <div class="flex gap-2 w-full sm:w-auto">
+                <button onclick="filterCategory('todos')" id="btn-filter-todos" class="flex-1 sm:flex-none px-4 py-2 rounded-full text-xs font-semibold bg-orange-600 text-white shadow-xs transition hover:bg-orange-700 cursor-pointer">
+                    Todos
+                </button>
+                <button onclick="filterCategory('Hecho a mano')" id="btn-filter-handmade" class="flex-1 sm:flex-none px-4 py-2 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer">
+                    Hecho a mano
+                </button>
+                <button onclick="filterCategory('Curado')" id="btn-filter-curated" class="flex-1 sm:flex-none px-4 py-2 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer">
+                    Curado
+                </button>
+            </div>
+        </div>
+
+        <!-- REJILLA DE PRODUCTOS (Productos iniciales en local antes de Firebase) -->
+        <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+            <!-- Los productos se renderizan dinámicamente mediante JavaScript -->
+        </div>
+    </main>
+
+    <!-- PANEL DEL CARRITO DE COMPRAS (SIDEBAR DESLIZANTE) -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full sm:w-[450px] bg-white z-50 shadow-2xl cart-transition transform translate-x-full flex flex-col border-l border-gray-100">
+        <!-- Encabezado del Carrito -->
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <h3 class="serif-font text-xl font-bold text-gray-900">Tu Pedido</h3>
+            </div>
+            <button onclick="toggleCart()" class="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-50 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Lista de Productos en el Carrito -->
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+            <!-- Render dinámico desde JS -->
+            <div class="text-center py-12 text-gray-400 flex flex-col items-center justify-center h-full">
+                <span class="text-5xl mb-3">🛍️</span>
+                <p class="font-medium text-gray-600">Tu carrito está vacío</p>
+                <p class="text-xs text-gray-400 mt-1">¡Agrega algunos productos hermosos para comenzar!</p>
+            </div>
+        </div>
+
+        <!-- Resumen y Checkout -->
+        <div class="p-6 border-t border-gray-100 bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-600 text-sm font-medium">Subtotal</span>
+                <span id="cart-subtotal" class="text-2xl font-bold text-gray-900">$0.00</span>
+            </div>
+            <p class="text-[10px] text-gray-400 mb-4">Los gastos de envío e impuestos se calculan al finalizar la compra.</p>
+            
+            <button onclick="proceedToCheckout()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl font-semibold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+                <span>Proceder a la Compra</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- PANEL DEL MENÚ MÓVIL (SIDEBAR DESLIZANTE IZQUIERDO) -->
+    <div id="mobile-menu" class="fixed inset-y-0 left-0 w-72 bg-white z-50 shadow-2xl cart-transition transform -translate-x-full flex flex-col border-r border-gray-100">
+        <!-- Encabezado del Menú -->
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="carissma - 4.jpg" alt="Icono Carissma" class="w-8 h-8 rounded-full object-cover border border-orange-100" onerror="this.src='https://placehold.co/32x32/f97316/ffffff?text=C'">
+                <span class="serif-font text-lg font-bold text-orange-600">Carissma</span>
+            </div>
+            <button onclick="toggleMobileMenu()" class="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-50 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Enlaces del Menú -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Categorías</p>
+                <button onclick="filterCategory('todos'); toggleMobileMenu(); smoothScrollTo(0, 1200);" class="w-full text-left py-2.5 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
+                    <span>🏠</span> Inicio
+                </button>
+                <button onclick="filterCategory('Hecho a mano'); toggleMobileMenu(); smoothScrollTo(0, 1200);" class="w-full text-left py-2.5 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
+                    <span>👐</span> Hecho a mano
+                </button>
+                <button onclick="filterCategory('Curado'); toggleMobileMenu(); smoothScrollTo(0, 1200);" class="w-full text-left py-2.5 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
+                    <span>✨</span> Curado
+                </button>
+            </div>
+
+            <hr class="border-gray-100">
+
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Información</p>
+                <button onclick="toggleMobileMenu(); smoothScrollToSection('#nosotros-section');" class="w-full text-left py-2.5 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
+                    Sobre Nosotros
+                </button>
+                <button onclick="toggleMobileMenu(); smoothScrollToSection('#contacto-section');" class="w-full text-left py-2.5 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
+                    Contacto
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer del Menú -->
+        <div class="p-6 border-t border-gray-100 bg-gray-50 text-center mt-auto">
+            <p class="text-zinc-500 text-[10px]">&copy; 2026 Carissma. Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+    <!-- Fondo opaco cuando el menú móvil está activo -->
+    <div id="mobile-menu-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/40 z-40 hidden transition-opacity"></div>
+
+    <!-- Fondo opaco cuando el carrito está activo -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-40 hidden transition-opacity"></div>
+
+    <!-- MODAL DE DETALLE DE PRODUCTO E INFORMACIÓN GENERAL -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <!-- Fondo oscuro -->
+        <div class="absolute inset-0 bg-black/60" onclick="closeDetailModal()"></div>
+        <!-- Contenido -->
+        <div class="bg-white rounded-3xl w-full max-h-[90vh] overflow-y-auto no-scrollbar relative z-10 shadow-2xl transition-all duration-300 max-w-lg">
+            <div class="p-6">
+                <div id="modal-header" class="flex justify-between items-start mb-4">
+                    <h4 id="modal-title" class="serif-font text-2xl font-bold text-gray-900">Detalles</h4>
+                    <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 p-1 hover:bg-gray-100 rounded-full cursor-pointer focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="modal-content-area" class="space-y-4">
+                    <!-- Dinámico -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN SOBRE NOSOTROS -->
+    <section id="nosotros-section" class="bg-white border-t border-gray-100 py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Imagen Decorativa con Textura/Rusticidad -->
+            <div class="relative h-[350px] md:h-[500px] rounded-2xl overflow-hidden shadow-md group">
+                <img src="images/fondo_carissma.jpg" alt="Atmósfera Carissma" class="w-full h-full object-cover transition duration-700 group-hover:scale-103" onerror="this.src='https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop'">
+                <!-- Filtro cálido sobre la imagen -->
+                <div class="absolute inset-0 bg-orange-950/10 mix-blend-multiply"></div>
+            </div>
+            
+            <!-- Texto Inspiracional -->
+            <div class="space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-orange-600 block">Esencia & Alma</span>
+                <h2 class="serif-font text-3xl md:text-4xl text-gray-900 font-bold leading-tight">Sobre Nosotros</h2>
+                <div class="w-16 h-0.5 bg-orange-500"></div>
+                <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+                    En Carissma creemos que tu espacio debe contar una historia de calidez, belleza e intención. Somos un rincón dedicado al encuentro entre la artesanía honesta, hecha a mano con paciencia infinita, y la curaduría selecta de objetos que inspiran calma y distinción.
+                </p>
+                <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+                    Colaboramos estrechamente con talleres familiares y artesanos locales que transmiten saberes generación tras generación, fusionándolos con un diseño minimalista y atemporal. Cada pieza en nuestra tienda ha sido elegida una a una por su alma, textura y calidad insuperable. Queremos llevar a tu hogar elementos con propósito, que transformen los momentos más simples del día a día en instantes de profunda conexión y belleza.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN POLÍTICAS DE COMPRA -->
+    <section id="politicas-section" class="bg-gray-50 border-t border-gray-100 py-16 md:py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span class="text-xs font-bold uppercase tracking-widest text-orange-600">Transparencia</span>
+                <h2 class="serif-font text-3xl md:text-4xl text-gray-900 font-bold">Nuestras Políticas</h2>
+                <div class="w-16 h-0.5 bg-orange-500 mx-auto"></div>
+                <p class="text-gray-500 text-sm">Queremos que tu experiencia de compra sea tan cálida y transparente como nuestras piezas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Tarjeta Política 1 -->
+                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-xs hover:shadow-md transition duration-300 space-y-4">
+                    <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 text-2xl">
+                        🚚
+                    </div>
+                    <h3 class="serif-font text-xl font-bold text-gray-900">Envíos y Entregas</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Hacemos envíos rápidos y seguros a nivel nacional. Para todas las compras superiores a $50, el costo de envío es completamente gratuito.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Por la naturaleza de los artículos **hechos a mano**, algunos productos pueden demorar de 2 a 4 días hábiles adicionales para su preparación en taller. Una vez despachado, recibirás un código de rastreo en tiempo real.
+                    </p>
+                </div>
+
+                <!-- Tarjeta Política 2 -->
+                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-xs hover:shadow-md transition duration-300 space-y-4">
+                    <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 text-2xl">
+                        🛡️
+                    </div>
+                    <h3 class="serif-font text-xl font-bold text-gray-900">Garantía de Devoluciones</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Si no estás 100% satisfecho con tu artículo curado o artesanal, dispones de hasta **14 días naturales** desde el momento de la entrega para solicitar una devolución completa.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        El artículo debe devolverse en su embalaje original y sin signos de uso. Una vez recibido e inspeccionado, procesaremos tu reembolso de inmediato en el mismo método de pago original.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN CONTACTO -->
+    <section id="contacto-section" class="bg-white border-t border-gray-100 py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Datos de contacto e Info -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div class="space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-orange-600">Cercanía</span>
+                        <h2 class="serif-font text-3xl md:text-4xl text-gray-900 font-bold">Hablemos</h2>
+                        <div class="w-16 h-0.5 bg-orange-500"></div>
+                        <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+                            ¿Tienes alguna pregunta sobre una de nuestras piezas hechas a mano, deseas una cotización especial o tienes dudas sobre tu envío? Estamos listos para atenderte con la calidez que nos define.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Item 1 -->
+                        <div class="flex items-start gap-4">
+                            <span class="text-xl">📍</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-xs tracking-wider uppercase">Dirección</h4>
+                                <p class="text-gray-500 text-sm">Calle del Arte 123, Madrid, España</p>
+                            </div>
+                        </div>
+                        <!-- Item 2 -->
+                        <div class="flex items-start gap-4">
+                            <span class="text-xl">✉️</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-xs tracking-wider uppercase">Email</h4>
+                                <p class="text-gray-500 text-sm">contacto@carissma.com</p>
+                            </div>
+                        </div>
+                        <!-- Item 3 -->
+                        <div class="flex items-start gap-4">
+                            <span class="text-xl">📞</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-xs tracking-wider uppercase">Teléfono</h4>
+                                <p class="text-gray-500 text-sm">+34 600 000 000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Contacto -->
+                <div class="lg:col-span-7 bg-gray-50 p-6 md:p-10 rounded-3xl border border-gray-100 shadow-xs">
+                    <form onsubmit="event.preventDefault(); showSectionModal('¡Mensaje Recibido!', 'Gracias por escribirnos. Te responderemos en un lapso de 24 horas hábiles.'); this.reset();" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-1.5">
+                                <label for="name" class="text-xs font-bold text-gray-700 uppercase tracking-wider">Nombre Completo</label>
+                                <input type="text" id="name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-orange-500 bg-white text-sm transition" placeholder="Ej. Ana Pérez">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label for="email" class="text-xs font-bold text-gray-700 uppercase tracking-wider">Correo Electrónico</label>
+                                <input type="email" id="email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-orange-500 bg-white text-sm transition" placeholder="ana@ejemplo.com">
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="message" class="text-xs font-bold text-gray-700 uppercase tracking-wider">Tu Mensaje</label>
+                            <textarea id="message" required rows="5" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-orange-500 bg-white text-sm transition resize-none" placeholder="Cuéntanos en qué podemos ayudarte..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-8 py-3.5 rounded-xl text-xs font-bold tracking-wider uppercase transition shadow-md hover:shadow-lg cursor-pointer">
+                            Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-zinc-900 text-white mt-12 py-10 border-t border-orange-500">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex flex-col items-center md:items-start">
+                <div class="flex items-center gap-2 mb-3">
+                    <img src="carissma - 4.jpg" alt="Icono Carissma" class="w-8 h-8 rounded-full object-cover border border-white/20" onerror="this.src='https://placehold.co/32x32/f97316/ffffff?text=C'">
+                    <span class="serif-font text-xl font-bold text-orange-400">Carissma</span>
+                </div>
+                <p class="text-zinc-400 text-sm text-center md:text-left">
+                    Artesanía selecta y diseño curado para enriquecer tu hogar y tu estilo de vida cotidiano.
+                </p>
+            </div>
+            <div class="text-center">
+                <h4 class="font-semibold text-orange-400 mb-3 text-sm tracking-wider uppercase">Políticas</h4>
+                <ul class="text-zinc-400 text-sm space-y-2">
+                    <li><button onclick="smoothScrollToSection('#politicas-section')" class="hover:text-white transition cursor-pointer">Envíos y Entregas</button></li>
+                    <li><button onclick="smoothScrollToSection('#politicas-section')" class="hover:text-white transition cursor-pointer">Devoluciones</button></li>
+                </ul>
+            </div>
+            <div class="text-center md:text-right flex flex-col items-center md:items-end justify-center">
+                <p class="text-zinc-500 text-xs mt-2">&copy; 2026 Carissma. Todos los derechos reservados.</p>
+                <p class="text-zinc-600 text-[10px] mt-1">Alojado gratuitamente en GitHub Pages con soporte Serverless.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÓGICA DE PROGRAMACIÓN DE LA PLANTILLA -->
+    <script>
+        // 1. Catálogo local simulando la futura estructura de Firebase Firestore
+        const mockProducts = [
+            {
+                id: "p1",
+                nombre: "Aretes de Mostacilla Tejidos",
+                precio: 20.00,
+                categoria: "Hecho a mano",
+                descripcion: "Elegantes aretes confeccionados a mano por artesanos locales con un patrón geométrico único y colores de temporada.",
+                imagen: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: "p2",
+                nombre: "Taza de Cerámica Rústica",
+                precio: 19.00,
+                categoria: "Hecho a mano",
+                descripcion: "Hecha en torno de alfarero y esmaltada a mano con un degradado en tonos arena y mar que hace que cada taza sea única.",
+                imagen: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: "p3",
+                nombre: "Set de Papelería Minimalista",
+                precio: 19.00,
+                categoria: "Curado",
+                descripcion: "Un set de escritura minimalista seleccionado cuidadosamente de marcas premium que incluye carpetas, libreta e instrumental de dibujo.",
+                imagen: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: "p4",
+                nombre: "Diario de Cuero Envejecido",
+                precio: 25.00,
+                categoria: "Hecho a mano",
+                descripcion: "Libreta encuadernada artesanalmente con piel genuina y papel de algodón reciclado, ideal para bocetos y notas personales.",
+                imagen: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: "p5",
+                nombre: "Vela de Soya Aromática",
+                precio: 15.00,
+                categoria: "Hecho a mano",
+                descripcion: "Vela vertida artesanalmente a mano con cera de soya orgánica, mecha de algodón y esencias relajantes de sándalo y jazmín.",
+                imagen: "https://images.unsplash.com/photo-1603006905003-be475563bc59?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: "p6",
+                nombre: "Organizador de Escritorio Moderno",
+                precio: 18.00,
+                categoria: "Curado",
+                descripcion: "Diseñado para mantener la pulcritud espacial. Contenedores geométricos de gran rigidez aptos para lápices, notas y tarjetas.",
+                imagen: "https://images.unsplash.com/photo-1593642532400-2682810df593?q=80&w=600&auto=format&fit=crop"
+            }
+        ];
+
+        // Estado de la aplicación
+        let cart = [];
+        let activeCategory = 'todos';
+
+        // Inicializar al cargar la página
+        window.onload = function() {
+            renderProducts();
+            updateCartUI();
+        };
+
+        // Función para renderizar los productos aplicando los filtros correspondientes
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            const filtered = activeCategory === 'todos' 
+                ? mockProducts 
+                : mockProducts.filter(p => p.categoria.toLowerCase() === activeCategory.toLowerCase());
+
+            filtered.forEach(product => {
+                // Crear tarjeta
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl shadow-xs hover:shadow-md border border-gray-100 overflow-hidden flex flex-col transition duration-300 transform hover:-translate-y-1";
+                
+                // Determinar el color del tag según la categoría
+                const isHandmade = product.categoria.toLowerCase() === 'hecho a mano';
+                const tagColorClass = isHandmade 
+                    ? "bg-zinc-800 text-white" 
+                    : "bg-orange-100 text-orange-800 border border-orange-200";
+
+                card.innerHTML = `
+                    <div class="relative h-40 sm:h-48 md:h-64 bg-gray-100 overflow-hidden group cursor-pointer" onclick="showProductDetails('${product.id}')">
+                        <img src="${product.imagen}" alt="${product.nombre}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy">
+                        <!-- Badge Dinámico -->
+                        <span class="absolute top-2 left-2 sm:top-3 sm:left-3 text-[8px] sm:text-[10px] font-bold tracking-widest uppercase px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-sm shadow-xs ${tagColorClass}">
+                            ${product.categoria}
+                        </span>
+                    </div>
+                    <div class="p-3 sm:p-5 flex flex-col flex-grow">
+                        <h4 class="font-semibold text-gray-900 text-sm sm:text-base md:text-lg mb-1 hover:text-orange-600 transition cursor-pointer line-clamp-1 sm:line-clamp-2" onclick="showProductDetails('${product.id}')">
+                            ${product.nombre}
+                        </h4>
+                        <p class="text-gray-500 text-[10px] sm:text-xs flex-grow mb-3 sm:mb-4 line-clamp-2">${product.descripcion}</p>
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-auto">
+                            <span class="text-base sm:text-lg md:text-xl font-bold text-gray-900">$${product.precio.toFixed(2)}</span>
+                            <button onclick="addToCart('${product.id}')" class="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition shadow-sm hover:shadow-md cursor-pointer flex items-center justify-center gap-1">
+                                <span>Añadir</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Función de filtro de categoría
+        function filterCategory(category) {
+            activeCategory = category;
+            
+            // Actualizar textos informativos
+            const titleEl = document.getElementById('category-title');
+            const descEl = document.getElementById('category-desc');
+
+            if (category === 'todos') {
+                titleEl.textContent = "Nuestra Colección";
+                descEl.textContent = "Explora piezas artesanales hechas a mano y artículos de diseño curados.";
+            } else if (category === 'Hecho a mano') {
+                titleEl.textContent = "Hecho a Mano";
+                descEl.textContent = "Artesanía local auténtica fabricada de manera tradicional y con amor.";
+            } else {
+                titleEl.textContent = "Curado por Expertos";
+                descEl.textContent = "Selección estricta de productos modernos elegidos por su diseño y calidad.";
+            }
+
+            // Actualizar botones de navegación
+            const btns = ['todos', 'handmade', 'curated'];
+            const labels = { 'todos': 'todos', 'handmade': 'Hecho a mano', 'curated': 'Curado' };
+            
+            btns.forEach(b => {
+                const navBtn = document.getElementById(`btn-nav-${b}`);
+                const filterBtn = document.getElementById(`btn-filter-${b}`);
+                
+                const isSelected = labels[b].toLowerCase() === category.toLowerCase() || (b === 'todos' && category === 'todos');
+                
+                if (isSelected) {
+                    navBtn.className = "hover:text-orange-600 transition border-b-2 border-orange-500 pb-1 text-orange-600 cursor-pointer";
+                    filterBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-full text-xs font-semibold bg-orange-600 text-white shadow-xs transition hover:bg-orange-700 cursor-pointer";
+                } else {
+                    navBtn.className = "hover:text-orange-600 transition border-b-2 border-transparent pb-1 cursor-pointer";
+                    filterBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer";
+                }
+            });
+
+            renderProducts();
+        }
+
+        // Control de apertura/cierre del carrito de compras
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+            
+            if (isOpen) {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Detener scroll de fondo
+            }
+        }
+
+        // Control de apertura/cierre del menú móvil (hamburguesa)
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Detener scroll de fondo
+            }
+        }
+
+        // Agregar artículo al carrito
+        function addToCart(productId) {
+            const product = mockProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.product.id === productId);
+            
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ product, quantity: 1 });
+            }
+
+            updateCartUI();
+            
+            // Efecto visual rápido para indicar que se añadió correctamente
+            const cartCountElement = document.getElementById('cart-counter');
+            cartCountElement.classList.add('scale-125', 'bg-emerald-600');
+            setTimeout(() => {
+                cartCountElement.classList.remove('scale-125', 'bg-emerald-600');
+            }, 300);
+        }
+
+        // Actualizar cantidades
+        function updateQuantity(productId, amount) {
+            const item = cart.find(item => item.product.id === productId);
+            if (!item) return;
+
+            item.quantity += amount;
+            if (item.quantity <= 0) {
+                // Eliminar del carrito
+                cart = cart.filter(i => i.product.id !== productId);
+            }
+
+            updateCartUI();
+        }
+
+        // Sincronizar el carrito con la pantalla
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cart-items');
+            const totalCountElement = document.getElementById('cart-counter');
+            const subtotalElement = document.getElementById('cart-subtotal');
+
+            // Calcular cantidades y subtotal
+            let totalQty = 0;
+            let subtotal = 0;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="text-center py-24 text-gray-400 flex flex-col items-center justify-center h-full">
+                        <span class="text-5xl mb-3">🛍️</span>
+                        <p class="font-medium text-gray-600">Tu carrito está vacío</p>
+                        <p class="text-xs text-gray-400 mt-1">¡Suma tus piezas favoritas!</p>
+                    </div>
+                `;
+            } else {
+                itemsContainer.innerHTML = '';
+                cart.forEach(item => {
+                    totalQty += item.quantity;
+                    subtotal += item.product.price * item.quantity;
+
+                    const itemRow = document.createElement('div');
+                    itemRow.className = "flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-100";
+                    itemRow.innerHTML = `
+                        <img src="${item.product.imagen}" alt="${item.product.nombre}" class="w-16 h-16 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h5 class="text-xs font-semibold text-gray-800 line-clamp-1">${item.product.nombre}</h5>
+                            <p class="text-[10px] text-gray-400 font-medium">${item.product.categoria}</p>
+                            <p class="text-sm font-bold text-gray-900 mt-1">$${item.product.price.toFixed(2)}</p>
+                        </div>
+                        <div class="flex items-center bg-white border border-gray-200 rounded-lg">
+                            <button onclick="updateQuantity('${item.product.id}', -1)" class="px-2 py-1 text-gray-500 hover:text-red-500 font-bold cursor-pointer">-</button>
+                            <span class="px-2 text-xs font-semibold text-gray-800">${item.quantity}</span>
+                            <button onclick="updateQuantity('${item.product.id}', 1)" class="px-2 py-1 text-gray-500 hover:text-green-600 font-bold cursor-pointer">+</button>
+                        </div>
+                    `;
+                    itemsContainer.appendChild(itemRow);
+                });
+            }
+
+            totalCountElement.textContent = totalQty;
+            subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        let modalQty = 1;
+
+        function decrementModalQty() {
+            if (modalQty > 1) {
+                modalQty--;
+                document.getElementById('modal-qty-val').textContent = modalQty;
+            }
+        }
+
+        function incrementModalQty() {
+            modalQty++;
+            document.getElementById('modal-qty-val').textContent = modalQty;
+        }
+
+        function addToCartWithQty(productId, qty) {
+            const product = mockProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.product.id === productId);
+            
+            if (existing) {
+                existing.quantity += qty;
+            } else {
+                cart.push({ product, quantity: qty });
+            }
+
+            updateCartUI();
+            
+            // Efecto visual en contador
+            const cartCountElement = document.getElementById('cart-counter');
+            cartCountElement.classList.add('scale-125', 'bg-emerald-600');
+            setTimeout(() => {
+                cartCountElement.classList.remove('scale-125', 'bg-emerald-600');
+            }, 300);
+        }
+
+        // Mostrar modal de detalle de producto
+        function showProductDetails(productId) {
+            const product = mockProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            modalQty = 1; // Restablecer cantidad
+
+            const modal = document.getElementById('detail-modal');
+            const modalContainer = modal.querySelector('.bg-white');
+            modalContainer.classList.remove('max-w-lg');
+            modalContainer.classList.add('max-w-3xl');
+
+            document.getElementById('modal-header').classList.add('hidden');
+
+            const content = document.getElementById('modal-content-area');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start relative pt-4">
+                    <!-- Botón de Cerrar Flotante -->
+                    <button onclick="closeDetailModal()" class="absolute -top-4 -right-2 text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition cursor-pointer z-20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <!-- Columna de Imagen -->
+                    <div class="rounded-2xl overflow-hidden h-72 md:h-[400px] bg-gray-50 shadow-inner group relative">
+                        <img src="${product.imagen}" alt="${product.nombre}" class="w-full h-full object-cover transition duration-700 group-hover:scale-103">
+                        <div class="absolute inset-0 bg-orange-950/5 mix-blend-multiply"></div>
+                    </div>
+
+                    <!-- Columna de Detalles -->
+                    <div class="flex flex-col h-full space-y-4 justify-between">
+                        <div class="space-y-4">
+                            <div>
+                                <span class="bg-orange-50 text-orange-700 font-bold border border-orange-100 uppercase tracking-widest text-[9px] px-2.5 py-1 rounded-md inline-block">
+                                    ${product.categoria}
+                                </span>
+                                <h3 class="serif-font text-2xl md:text-3xl font-bold text-gray-950 mt-3 leading-tight">
+                                    ${product.nombre}
+                                </h3>
+                            </div>
+
+                            <p class="text-gray-500 text-sm leading-relaxed">
+                                ${product.descripcion}
+                            </p>
+
+                            <!-- Selector de Cantidad -->
+                            <div class="flex items-center gap-4 pt-2">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Cantidad:</span>
+                                <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl p-0.5 shadow-xs">
+                                    <button onclick="decrementModalQty()" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-red-500 font-bold transition focus:outline-none cursor-pointer">-</button>
+                                    <span id="modal-qty-val" class="w-8 text-center text-sm font-semibold text-gray-800">1</span>
+                                    <button onclick="incrementModalQty()" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-green-600 font-bold transition focus:outline-none cursor-pointer">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Precio y Botón -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-6 border-t border-gray-100 mt-6">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Precio Total</span>
+                                <span class="text-3xl font-black text-gray-950">$${product.precio.toFixed(2)}</span>
+                            </div>
+                            <button onclick="addToCartWithQty('${product.id}', modalQty); closeDetailModal();" class="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-8 py-3.5 rounded-xl text-xs font-bold tracking-wider uppercase transition shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                <span>Añadir al Pedido</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        // Mostrar modales informativos (Contacto, Sobre Nosotros, Políticas)
+        function showSectionModal(titleText, bodyText) {
+            const modal = document.getElementById('detail-modal');
+            const modalContainer = modal.querySelector('.bg-white');
+            modalContainer.classList.remove('max-w-3xl');
+            modalContainer.classList.add('max-w-lg');
+
+            document.getElementById('modal-header').classList.remove('hidden');
+
+            const title = document.getElementById('modal-title');
+            const content = document.getElementById('modal-content-area');
+
+            title.textContent = titleText;
+            content.innerHTML = `
+                <div class="space-y-4 py-2">
+                    <p class="text-gray-600 text-sm leading-relaxed">${bodyText}</p>
+                    <div class="flex justify-end pt-4 border-t border-gray-100">
+                        <button onclick="closeDetailModal()" class="bg-zinc-800 hover:bg-zinc-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold tracking-wider cursor-pointer">
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            const modalContainer = document.getElementById('detail-modal').querySelector('.bg-white');
+            modalContainer.classList.remove('max-w-3xl');
+            modalContainer.classList.add('max-w-lg');
+            document.getElementById('modal-header').classList.remove('hidden');
+        }
+
+        // Acción de pagar simplificada para la simulación
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                showSectionModal('Carrito Vacío', 'Por favor, añade al menos un producto a tu carrito de compras antes de continuar.');
+                return;
+            }
+
+            // Preparar mensaje para simular finalización del pedido
+            let orderDetails = "🛍️ *Pedido de Carissma* 🛍️\n\n";
+            let total = 0;
+            
+            cart.forEach(item => {
+                orderDetails += `- ${item.product.nombre} (x${item.quantity}): $${(item.product.price * item.quantity).toFixed(2)}\n`;
+                total += item.product.price * item.quantity;
+            });
+
+            orderDetails += `\n*Subtotal:* $${total.toFixed(2)}\n\n_¡En el próximo paso conectaremos Firebase para almacenar este pedido automáticamente y procesarlo!_`;
+
+            showSectionModal('¡Orden Registrada!', orderDetails.replace(/\n/g, '<br>'));
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
+
+        // Función de scroll suave personalizado con duración y aceleración controlada
+        function smoothScrollTo(targetY, duration = 1200) {
+            const startY = window.scrollY;
+            const difference = targetY - startY;
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+
+                // Función de aceleración easeInOutCubic (comienza lento, acelera, termina lento)
+                const ease = progress < 0.5 
+                    ? 4 * progress * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                window.scrollTo(0, startY + difference * ease);
+
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(step);
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // Función para desplazarse a una sección específica compensando el header fijo
+        function smoothScrollToSection(selector) {
+            const element = document.querySelector(selector);
+            if (element) {
+                const headerOffset = 80; // Altura de la cabecera fija
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.scrollY - headerOffset;
+                smoothScrollTo(offsetPosition, 1200);
+            }
+        }
+
+        // Función para volver arriba suavemente
+        function scrollToTop() {
+            smoothScrollTo(0, 1200);
+        }
+
+        // Escuchar el evento scroll para mostrar/ocultar el botón "Back to Top"
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                btn.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                btn.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                btn.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                btn.classList.remove('translate-y-0', 'opacity-100');
+            }
+        });
+    </script>
+
+    <!-- BOTÓN VOLVER ARRIBA (BACK TO TOP) -->
+    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-6 right-6 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none z-40 focus:outline-none hover:scale-105 active:scale-95 cursor-pointer" aria-label="Volver arriba">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+</body>
+</html>
